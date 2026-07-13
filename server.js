@@ -1,0 +1,32 @@
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const db = require("./db");
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// Serve the upload form at root and /uploads
+app.use("/uploads", express.static("uploads"));
+
+// Root route – redirect to upload form for easy tunnel access
+app.get("/", (req, res) => {
+    res.redirect("/uploads/upload.html");
+});
+
+// Health check endpoint
+app.get("/health", (req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
+const documentsRoutes = require("./routes/documents");
+
+app.use("/api/documents", documentsRoutes);
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+});
