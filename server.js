@@ -24,6 +24,9 @@ const documentsRoutes = require("./routes/documents");
 
 app.use("/api/documents", documentsRoutes);
 
+const visitsRoutes = require("./routes/visits");
+app.use("/api/visits", visitsRoutes);
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
