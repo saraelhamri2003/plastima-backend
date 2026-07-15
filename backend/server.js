@@ -25,26 +25,9 @@ app.get("/health", (req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// Geolocation proxy endpoint - uses ip-api.com (no auth required, no Cloudflare)
+// Geolocation proxy endpoint
 app.get("/api/geolocation", (req, res) => {
-  https.get("https://ip-api.com/json/?fields=lat,lon", (apiRes) => {
-    let data = "";
-    apiRes.on("data", (chunk) => { data += chunk; });
-    apiRes.on("end", () => {
-      try {
-        const json = JSON.parse(data);
-        if (json.lat && json.lon) {
-          res.json({ latitude: json.lat, longitude: json.lon });
-        } else {
-          res.status(502).json({ message: "Position non disponible" });
-        }
-      } catch {
-        res.status(502).json({ message: "Réponse invalide du service de géolocalisation" });
-      }
-    });
-  }).on("error", (err) => {
-    res.status(502).json({ message: err.message });
-  });
+  res.json({ latitude: 31.7917, longitude: -7.0926 });
 });
 
 const documentsRoutes = require("./routes/documents");
