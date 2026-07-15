@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8f9fa;
+            color: #33475b;
+            padding: 24px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #cbd6e2;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3e50;
+        }
+        .header p {
+            font-size: 13px;
+            color: #5c6f84;
+            margin-top: 4px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #425b76;
+        }
+        .form-group label span {
+            color: #f25c54;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd6e2;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #33475b;
+            background-color: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #007a87;
+            box-shadow: 0 0 0 3px rgba(0, 122, 135, 0.15);
+        }
+        .form-control:disabled {
+            background-color: #f5f8fa;
+            color: #7c98b6;
+            cursor: not-allowed;
+        }
+        .file-dropzone {
+            border: 2px dashed #cbd6e2;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            background: #fdfdfd;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .file-dropzone:hover {
+            background-color: #f5f8fa;
+            border-color: #007a87;
+        }
+        .file-dropzone input[type="file"] {
+            display: none;
+        }
+        .file-dropzone .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .file-dropzone .text {
+            color: #5c6f84;
+            font-weight: 500;
+        }
+        .file-dropzone .subtext {
+            font-size: 12px;
+            color: #7c98b6;
+            margin-top: 4px;
+        }
+        .file-info {
+            display: none;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #eaf0f6;
+            border-radius: 4px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .file-info span {
+            font-weight: 500;
+            color: #2d3e50;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 80%;
+        }
+        .file-info button {
+            background: none;
+            border: none;
+            color: #f25c54;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .btn-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+            border-top: 1px solid #cbd6e2;
+            padding-top: 16px;
+        }
+        .btn {
+            padding: 10px 16px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+        .btn-secondary {
+            background-color: #ffffff;
+            border: 1px solid #cbd6e2;
+            color: #007a87;
+        }
+        .btn-secondary:hover {
+            background-color: #f5f8fa;
+            border-color: #007a87;
+        }
+        .btn-primary {
+            background-color: #ff7a59;
+            border: 1px solid #ff7a59;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background-color: #ff9e85;
+            border-color: #ff9e85;
+        }
+        .btn-primary:disabled {
+            background-color: #cbd6e2;
+            border-color: #cbd6e2;
+            color: #7c98b6;
+            cursor: not-allowed;
+        }
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 18px;
+            display: none;
+            font-weight: 500;
+        }
+        .alert-error {
+            background-color: #fdf2f2;
+            border: 1px solid #fde2e2;
+            color: #c81e1e;
+        }
+        .alert-success {
+            background-color: #f3faf7;
+            border: 1px solid #def7ec;
+            color: #03543f;
+        }
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s ease-in-out infinite;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="form-title">Ajouter un document</h1>
+            <p id="form-subtitle">Téléchargez un fichier PDF et spécifiez ses métadonnées.</p>
+        </div>
+
+        <div id="alert-box" class="alert alert-error"></div>
+
+        <form id="upload-form" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label for="document_type">Type de document <span>*</span></label>
+                <select id="document_type" class="form-control" required>
+                    <option value="" disabled selected>Choisir un type...</option>
+                    <option value="Devis">Devis</option>
+                    <option value="Bon de commande">Bon de commande</option>
+                    <option value="Contrat">Contrat</option>
+                    <option value="Facture">Facture</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="version">Version <span>*</span></label>
+                <input type="text" id="version" class="form-control" placeholder="ex: V1" required>
+            </div>
+
+            <div class="form-group">
+                <label>Fichier PDF <span>*</span></label>
+                <div class="file-dropzone" onclick="document.getElementById('file-input').click()">
+                    <span class="icon">📄</span>
+                    <span class="text">Cliquez pour sélectionner un fichier PDF</span>
+                    <span class="subtext">Format PDF uniquement (max 10MB)</span>
+                    <input type="file" id="file-input" accept="application/pdf" onchange="handleFileSelect(event)" required>
+                </div>
+                <div id="file-info-bar" class="file-info">
+                    <span id="selected-file-name">nom_du_fichier.pdf</span>
+                    <button type="button" onclick="clearFile(event)">&times;</button>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn btn-secondary" onclick="handleCancel()">Annuler</button>
+                <button type="submit" id="submit-btn" class="btn btn-primary">Importer</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Parse Query Parameters
+        const params = new URLSearchParams(window.location.search);
+        const dealId = params.get('dealId');
+        const uploadedBy = params.get('uploadedBy') || 'Utilisateur CRM';
+        const documentId = params.get('documentId');
+        const currentVersion = params.get('currentVersion');
+        const documentType = params.get('documentType');
+
+        const isEditMode = !!documentId;
+
+        // Initialize Form based on Edit Mode
+        if (isEditMode) {
+            document.getElementById('form-title').innerText = "Nouvelle version du document";
+            document.getElementById('form-subtitle').innerText = "Importez une version mise à jour pour ce document.";
+            document.getElementById('submit-btn').innerText = "Mettre à jour";
+            
+            // Prefill and disable Document Type
+            if (documentType) {
+                const typeSelect = document.getElementById('document_type');
+                typeSelect.value = documentType;
+                typeSelect.disabled = true;
+            }
+
+            // Suggest next version
+            if (currentVersion) {
+                let nextVersion = currentVersion;
+                const match = currentVersion.match(/^([a-zA-Z]*)(\d+)$/);
+                if (match) {
+                    const prefix = match[1] || 'V';
+                    const num = parseInt(match[2], 10) + 1;
+                    nextVersion = prefix + num;
+                } else {
+                    nextVersion = currentVersion + "_new";
+                }
+                document.getElementById('version').value = nextVersion;
+            }
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            const alertBox = document.getElementById('alert-box');
+            alertBox.style.display = 'none';
+
+            if (file) {
+                if (file.type !== 'application/pdf') {
+                    showAlert("Veuillez sélectionner uniquement un fichier au format PDF.");
+                    clearFile();
+                    return;
+                }
+                document.getElementById('selected-file-name').innerText = file.name;
+                document.getElementById('file-info-bar').style.display = 'flex';
+                document.querySelector('.file-dropzone').style.display = 'none';
+            }
+        }
+
+        function clearFile(event) {
+            if (event) event.stopPropagation();
+            document.getElementById('file-input').value = '';
+            document.getElementById('file-info-bar').style.display = 'none';
+            document.querySelector('.file-dropzone').style.display = 'block';
+        }
+
+        function showAlert(message, type = 'error') {
+            const alertBox = document.getElementById('alert-box');
+            alertBox.innerText = message;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.style.display = 'block';
+        }
+
+        function notifyParent(success, message) {
+            window.parent.postMessage({
+                type: "HS_UPLOAD_RESULT",
+                payload: { success, message }
+            }, "*");
+        }
+
+        function handleCancel() {
+            notifyParent(false, "cancelled");
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const alertBox = document.getElementById('alert-box');
+            alertBox.style.display = 'none';
+
+            const submitBtn = document.getElementById('submit-btn');
+            const fileInput = document.getElementById('file-input');
+            const docType = document.getElementById('document_type').value;
+            const version = document.getElementById('version').value;
+
+            if (!fileInput.files[0]) {
+                showAlert("Veuillez sélectionner un fichier PDF.");
+                return;
+            }
+            if (!docType || !version) {
+                showAlert("Tous les champs obligatoires (*) doivent être remplis.");
+                return;
+            }
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            formData.append("version", version);
+            formData.append("uploaded_by", uploadedBy);
+
+            let url = "/api/documents";
+            let method = "POST";
+
+            if (isEditMode) {
+                url = `/api/documents/${documentId}/version`;
+                method = "PUT";
+            } else {
+                formData.append("deal_id", dealId);
+                formData.append("document_type", docType);
+            }
+
+            // Disable button and show spinner
+            submitBtn.disabled = true;
+            const originalText = submitBtn.innerText;
+            submitBtn.innerHTML = `<span class="spinner"></span>Envoi en cours...`;
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || "Une erreur s'est produite lors de l'importation.");
+                }
+
+                showAlert("Document importé avec succès !", "success");
+                
+                // Wait slightly for the success alert to show before closing
+                setTimeout(() => {
+                    notifyParent(true);
+                }, 800);
+
+            } catch (error) {
+                showAlert(error.message);
+                submitBtn.disabled = false;
+                submitBtn.innerText = originalText;
+            }
+        }
+    </script>
+</body>
+</html>

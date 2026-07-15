@@ -1,0 +1,11 @@
+{
+  "uid": "project_documents_card",
+  "type": "card",
+  "config": {
+    "name": "Documents du projet",
+    "description": "Gestion documentaire des transactions Plastima.",
+    "entrypoint": "/app/cards/get-started-app-card.tsx",
+    "location": "crm.record.sidebar",
+    "objectTypes": ["DEAL"]
+  }
+}

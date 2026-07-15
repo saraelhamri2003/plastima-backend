@@ -1,0 +1,11 @@
+{
+  "uid": "project_visits_card",
+  "type": "card",
+  "config": {
+    "name": "Visites du projet",
+    "description": "Suivi des visites commerciales des transactions Plastima.",
+    "entrypoint": "/app/cards/visits-card.tsx",
+    "location": "crm.record.sidebar",
+    "objectTypes": ["DEAL"]
+  }
+}

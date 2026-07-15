@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: plastima-backend
+    env: node
+    buildCommand: npm install --production
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 10000
