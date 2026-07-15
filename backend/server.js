@@ -5,7 +5,10 @@ const db = require("./db");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: ["https://app.hubspot.com", "https://app.hubspotqa.com"],
+  credentials: true
+}));
 app.use(express.json());
 
 // Serve the upload form and files at /uploads
