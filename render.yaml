@@ -2,6 +2,7 @@ services:
   - type: web
     name: plastima-backend
     env: node
+    rootDir: backend
     buildCommand: npm install --production
     startCommand: node server.js
     envVars:
