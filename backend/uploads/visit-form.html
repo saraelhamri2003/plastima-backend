@@ -81,20 +81,10 @@
             border-color: #007a87;
             box-shadow: 0 0 0 3px rgba(0, 122, 135, 0.15);
         }
-        .form-control:disabled, .form-control[readonly] {
+        .form-control:disabled {
             background-color: #f5f8fa;
             color: #7c98b6;
             cursor: not-allowed;
-        }
-        .gps-row {
-            display: flex;
-            align-items: flex-end;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .gps-row .form-group {
-            margin-bottom: 0;
-            flex: 1;
         }
         .btn {
             padding: 10px 16px;
@@ -174,7 +164,7 @@
     <div class="container">
         <div class="header">
             <h1 id="form-title">Ajouter une visite</h1>
-            <p id="form-subtitle">Renseignez les informations de votre visite et détectez votre position.</p>
+            <p id="form-subtitle">Renseignez les informations de votre visite.</p>
         </div>
 
         <div id="alert-box" class="alert alert-error"></div>
@@ -225,23 +215,9 @@
                 </div>
             </div>
 
-            <div class="gps-row">
-                <div class="form-group" style="flex: 2;">
-                    <label for="location">Lieu</label>
-                    <input type="text" id="location" class="form-control" placeholder="Adresse complète">
-                </div>
-                <button type="button" class="btn btn-secondary" id="btn-gps" onclick="detectGPS()" style="height: 42px;">📍 Localiser</button>
-            </div>
-
-            <div class="form-row" id="coords-row">
-                <div class="form-group">
-                    <label>Latitude</label>
-                    <input type="text" id="gps_lat" class="form-control" readonly>
-                </div>
-                <div class="form-group">
-                    <label>Longitude</label>
-                    <input type="text" id="gps_lng" class="form-control" readonly>
-                </div>
+            <div class="form-group">
+                <label for="location">Lieu</label>
+                <input type="text" id="location" class="form-control" placeholder="Adresse complète">
             </div>
 
             <div class="form-group">
@@ -284,92 +260,6 @@
             notifyParent(false, "cancelled");
         }
 
-        function applyCoordinates(lat, lng, sourceLabel) {
-            document.getElementById('gps_lat').value = lat;
-            document.getElementById('gps_lng').value = lng;
-            document.getElementById('coords-row').style.display = 'flex';
-
-            const locationInput = document.getElementById('location');
-            if (!locationInput.value) {
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data && data.display_name) {
-                            locationInput.value = data.display_name;
-                        }
-                    })
-                    .catch(err => console.error("Geocoding error", err));
-            }
-
-            showAlert(`Position détectée (${sourceLabel}) : ${Number(lat).toFixed(5)}, ${Number(lng).toFixed(5)}`, "success");
-        }
-
-        function resetGpsButton(btn, originalText) {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }
-
-        async function detectGPSWithIpFallback() {
-            const response = await fetch("https://ipapi.co/json/");
-            if (!response.ok) {
-                throw new Error("IP geolocation failed");
-            }
-
-            const data = await response.json();
-            if (!data.latitude || !data.longitude) {
-                throw new Error("Missing coordinates");
-            }
-
-            const locationInput = document.getElementById('location');
-            if (!locationInput.value) {
-                const parts = [data.city, data.region, data.country_name].filter(Boolean);
-                if (parts.length > 0) {
-                    locationInput.value = parts.join(", ");
-                }
-            }
-
-            applyCoordinates(data.latitude, data.longitude, "IP");
-        }
-
-        function detectGPS() {
-            const btn = document.getElementById('btn-gps');
-            const originalText = btn.innerText;
-            btn.innerHTML = `<span class="spinner"></span>...`;
-            btn.disabled = true;
-            document.getElementById('alert-box').style.display = 'none';
-
-            const finishSuccess = () => {
-                btn.innerHTML = `📍 Localisé`;
-                btn.disabled = false;
-            };
-
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    applyCoordinates(position.coords.latitude, position.coords.longitude, "GPS");
-                    finishSuccess();
-                }, async function() {
-                    try {
-                        await detectGPSWithIpFallback();
-                        finishSuccess();
-                    } catch {
-                        resetGpsButton(btn, originalText);
-                        showAlert("Impossible d'obtenir la position. Autorisez la localisation ou réessayez.");
-                    }
-                }, {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
-                });
-            } else {
-                detectGPSWithIpFallback()
-                    .then(finishSuccess)
-                    .catch(() => {
-                        resetGpsButton(btn, originalText);
-                        showAlert("La géolocalisation n'est pas disponible sur cet appareil.");
-                    });
-            }
-        }
-
         async function handleSubmit(event) {
             event.preventDefault();
             const alertBox = document.getElementById('alert-box');
@@ -397,13 +287,6 @@
                 objectives: document.getElementById('objectives').value,
                 notes_before: document.getElementById('notesBefore').value,
             };
-
-            const lat = document.getElementById('gps_lat').value;
-            const lng = document.getElementById('gps_lng').value;
-            if (lat && lng) {
-                payload.gps_lat = parseFloat(lat);
-                payload.gps_lng = parseFloat(lng);
-            }
 
             submitBtn.disabled = true;
             const originalText = submitBtn.innerText;
