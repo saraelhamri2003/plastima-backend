@@ -5,18 +5,11 @@ const db = require("./db");
 
 const app = express();
 
-app.use(cors({
-  origin: ["https://app.hubspot.com", "https://app.hubspotqa.com"],
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 
 // Serve the upload form and files at /uploads
-app.use("/uploads", (req, res, next) => {
-  res.setHeader("X-Frame-Options", "");
-  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://app.hubspot.com https://app.hubspotqa.com");
-  next();
-}, express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 
 // Root route – redirect to upload form for easy tunnel access
 app.get("/", (req, res) => {

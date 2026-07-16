@@ -355,12 +355,11 @@
             formData.append("version", version);
             formData.append("uploaded_by", uploadedBy);
 
-            const apiBase = window.location.origin;
-            let url = `${apiBase}/api/documents`;
+            let url = "/api/documents";
             let method = "POST";
 
             if (isEditMode) {
-                url = `${apiBase}/api/documents/${documentId}/version`;
+                url = `/api/documents/${documentId}/version`;
                 method = "PUT";
             } else {
                 formData.append("deal_id", dealId);
