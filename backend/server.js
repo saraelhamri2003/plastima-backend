@@ -13,8 +13,8 @@ app.use(express.json());
 
 // Serve the upload form and files at /uploads
 app.use("/uploads", (req, res, next) => {
-  res.setHeader("X-Frame-Options", "SAMEORIGIN");
-  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://app.hubspot.com");
+  res.setHeader("X-Frame-Options", "");
+  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://app.hubspot.com https://app.hubspotqa.com");
   next();
 }, express.static("uploads"));
 
